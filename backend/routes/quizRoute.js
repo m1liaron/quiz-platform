@@ -7,7 +7,7 @@ const authorization = require('../middleware/authentication');
 const { createQuiz, updateQuiz, deleteQuiz, getQuiz} = require('../controllers/quizzes');
 
 router.post('/', authorization, createQuiz);
-router.use('/:id', authorization)
+router.route('/:id', authorization)
     .get(getQuiz)
     .put(updateQuiz)
     .delete(deleteQuiz);

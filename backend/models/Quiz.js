@@ -7,17 +7,11 @@ const QuizSchema = new mongoose.Schema({
     },
     questions: [
         {
-            question: {
-                type: String,
-                required: true,
-            },
-            answer: {
-                type: String,
-                required: true,
-            }
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Question'
         }
     ]
-});
+}, { timestamps: true });
 
 const Quiz = mongoose.model('Quiz', QuizSchema);
 

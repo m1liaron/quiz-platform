@@ -1,7 +1,9 @@
 const express = require('express')
-
 const router = express.Router()
 
-// get user data
+const authorization = require('../middleware/authentication');
+const { getUserData } = require('../controllers/users');
+
+router.get('/:id', authorization, getUserData);
 
 module.exports = router;
