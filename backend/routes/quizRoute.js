@@ -6,9 +6,14 @@ const authorization = require('../middleware/authentication');
 // create, delete, update quiz, get
 const { createQuiz, updateQuiz, deleteQuiz, getQuiz} = require('../controllers/quizzes');
 
-router.post('/', authorization, createQuiz);
-router.route('/:id', authorization)
+// router.post('/:id', authorization, createQuiz);
+
+// Apply authorization middleware to all routes with /:id
+router.use('/:id', authorization);
+
+router.route('/:id')
     .get(getQuiz)
+    .post(createQuiz)
     .put(updateQuiz)
     .delete(deleteQuiz);
 

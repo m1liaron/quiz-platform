@@ -10,7 +10,12 @@ const QuizSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Question'
         }
-    ]
+    ],
+    createdBy:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        // required: [true, "Please provide a user's id, that own this quiz."]
+    }
 }, { timestamps: true });
 
 const Quiz = mongoose.model('Quiz', QuizSchema);
