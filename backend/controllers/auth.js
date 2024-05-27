@@ -7,7 +7,7 @@ const register = async (req, res) => {
         const { email } = req.body;
         const findUser = await User.findOne({email});
         if(findUser){
-            return res.status(409).json({error: 'User already exists'});
+            return res.status(409).json({message: 'User already exists'});
         }
 
         const user = await User.create(req.body);
@@ -19,7 +19,7 @@ const register = async (req, res) => {
         });
     } catch (err){
         console.log(err);
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({error: err.message})
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: err.message})
     }
 }
 
@@ -27,17 +27,17 @@ const login = async (req, res) => {
     try{
         const { email, password } = req.body;
         if(!email || !password){
-            return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Please provide email and password' });
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Please provide email and password' });
         }
 
         const user = await User.findOne({email});
         if(!user){
-            return res.status(StatusCodes.UNAUTHORIZED).json({ error: 'Invalid credentials' });
+            return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Invalid credentials' });
         }
 
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if(!isPasswordCorrect){
-            return res.status(StatusCodes.UNAUTHORIZED).json({ error: 'Invalid credentials' });
+            return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Invalid credentials' });
         }
         const token = user.createJWT();
 
@@ -47,7 +47,7 @@ const login = async (req, res) => {
         })
     } catch (err){
         console.log(err);
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({error: err.message})
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: err.message})
     }
 }
 

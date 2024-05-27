@@ -1,24 +1,24 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {makeRequest} from "../utils/api.js";
 
-const register = createAsyncThunk(
+export const register = createAsyncThunk(
     'user/register', async (userData, thunkAPI) => {
         try {
-            const response = await makeRequest("POST", userData, '/register');
-            localStorage.setItem("token", JSON.stringify(response.data.token)); // save token to localstorage
-            return response.data
+            const response = await makeRequest("POST", '/auth/register', userData);
+            await localStorage.setItem("token", JSON.stringify(response.token)); // save token to localstorage
+            return response.user
         } catch (error){
             return thunkAPI.rejectWithValue(error.message); // Return error message
         }
     }
 )
 
-const login = createAsyncThunk(
+export const login = createAsyncThunk(
     'user/login', async (userData, thunkAPI) => {
         try{
-            const response = await makeRequest("POST", userData, '/login');
-            localStorage.setItem("token", JSON.stringify(response.data.token)); // save token to localstorage
-            return response.data
+            const response = await makeRequest("POST", '/auth/login', userData);
+            await localStorage.setItem("token", JSON.stringify(response.token)); // save token to localstorage
+            return response.user
         } catch (error){
             return thunkAPI.rejectWithValue(error.message); // Return error message
         }
@@ -57,6 +57,7 @@ const userSlice = createSlice({
             .addCase(login.fulfilled, (state, action) => {
                 state.loading = false;
                 state.user = action.payload;
+                state.error = null;
             })
             .addCase(login.rejected, (state, action) => {
                 state.loading = false;
@@ -65,6 +66,6 @@ const userSlice = createSlice({
     }
 })
 
-export const selectUser = (state) => state.user.user;
+export const selectUser = (state) => state.user;
 
 export const userReducers = userSlice.reducer;

@@ -1,35 +1,31 @@
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import {useSelector} from "react-redux";
-import {selectUser} from "./redux/userSlice.js";
 import LoginPage from "./pages/LoginPage.jsx";
-import RegisterPage from "./pages/RegisterPage.jsx";
 import QuizPage from "./pages/QuizPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
+import RegisterPage from "./pages/RegisterPage.jsx";
 
 const HomePoint = () => {
-  const user = useSelector(selectUser);
+  const token = localStorage.getItem("token");
 
-  return user ? <HomePage/> : <LoginPage/>;
+  return token ? <HomePage/> : <LoginPage/>;
 }
 
 const router = createBrowserRouter([
   {
-    path:'/',
-    element: <HomePoint/>,
-    children: [
-      {
-        path:'login',
-        element: <LoginPage/>
-      },
-      {
-        path:'register',
-        element: <RegisterPage/>
-      },
-      {
-        path: 'quiz/:id',
-        element: <QuizPage/>
-      }
-    ]
+    path: '/',
+    element: <HomePoint />,
+  },
+  {
+    path: '/login',
+    element: <LoginPage />,
+  },
+  {
+    path: '/register',
+    element: <RegisterPage />,
+  },
+  {
+    path: '/quiz/:id',
+    element: <QuizPage />,
   }
 ])
 
