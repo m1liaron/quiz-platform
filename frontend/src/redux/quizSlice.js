@@ -2,10 +2,10 @@ import {createSlice} from "@reduxjs/toolkit";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {makeRequest} from "../utils/api.js";
 
-const createQuiz = createAsyncThunk(
+export const createQuiz = createAsyncThunk(
     'quiz/create', async (quizData, thunkAPI) => {
         try {
-            const response = await makeRequest("POST", quizData, `/quiz/${quizData.id}`);
+            const response = await makeRequest("POST", `/quiz/${quizData.id}`, quizData);
             return response.data;
         } catch(error){
             return thunkAPI.rejectWithValue(error.message); // Return error message
@@ -13,10 +13,10 @@ const createQuiz = createAsyncThunk(
     }
 )
 
-const updateQuiz = createAsyncThunk(
+export const updateQuiz = createAsyncThunk(
     'quiz/update', async (quizData, thunkAPI) => {
         try {
-            const response = await makeRequest("PUT", quizData, `/quiz/${quizData.id}`);
+            const response = await makeRequest("PUT", `/quiz/${quizData.id}` );
             return response.data;
         } catch(error){
             return thunkAPI.rejectWithValue(error.message); // Return error message
@@ -24,10 +24,10 @@ const updateQuiz = createAsyncThunk(
     }
 )
 
-const deleteQuiz = createAsyncThunk(
+export const deleteQuiz = createAsyncThunk(
     'quiz/delete', async (quizData, thunkAPI) => {
         try {
-            const response = await makeRequest("DELETE", quizData, `/quiz/${quizData.id}`);
+            const response = await makeRequest("DELETE",`/quiz/${quizData.id}`, quizData);
             return response.data;
         } catch(error){
             return thunkAPI.rejectWithValue(error.message); // Return error message
@@ -35,11 +35,22 @@ const deleteQuiz = createAsyncThunk(
     }
 )
 
-const getQuiz = createAsyncThunk(
+export const getQuiz = createAsyncThunk(
     'quiz/get', async (quizData, thunkAPI) => {
         try {
-            const response = await makeRequest("GET", quizData, `/quiz/${quizData.id}`);
-            return response.data;
+            const response = await makeRequest("GET", `/quiz/${quizData.id}`, quizData);
+            return response;
+        } catch(error){
+            return thunkAPI.rejectWithValue(error.message); // Return error message
+        }
+    }
+)
+
+export const getAllQuiz = createAsyncThunk(
+    'quiz/getAll', async (quizData, thunkAPI) => {
+        try {
+            const response = await makeRequest("GET", `/quiz`);
+            return response;
         } catch(error){
             return thunkAPI.rejectWithValue(error.message); // Return error message
         }
@@ -78,7 +89,7 @@ const quizSlice = createSlice({
             .addCase(updateQuiz.fulfilled, (state, action) => {
                 state.loading = false;
                 // Update the specific quiz in state with the updated data
-                const updatedQuizIndex = state.quizzes.findIndex(quiz => quiz.id === action.payload.id);
+                const updatedQuizIndex = state.quizzes.findIndex(quiz => quiz._id === action.payload.id);
                 if (updatedQuizIndex !== -1){
                     state.quizzes[updatedQuizIndex] = action.payload;
                 }
@@ -113,9 +124,22 @@ const quizSlice = createSlice({
             .addCase(getQuiz.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
+            })
+            // all quizzes
+            .addCase(getAllQuiz.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getAllQuiz.fulfilled, (state, action) => {
+                state.loading = false;
+                state.quizzes = action.payload;
+            })
+            .addCase(getAllQuiz.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
             });
     }
 })
 
-// export const selectQuiz = (state) => state.quizzes.quizzes;
+export const selectQuiz = (state) => state.quizzes;
 export const quizzesReducers = quizSlice.reducer;

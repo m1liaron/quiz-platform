@@ -27,7 +27,11 @@ const createQuiz = async (req, res) => {
             return res.status(401).json({message: `User with id: ${userId}, not found`});
         }
 
-        findUser.own_quizzes.push(newQuiz._id);
+        const own_quiz = {
+            quizId: newQuiz._id,
+            title: newQuiz.title,
+        }
+        findUser.own_quizzes.push(own_quiz);
         await findUser.save();
 
         res.status(StatusCodes.CREATED).json({ quiz: newQuiz });
@@ -61,7 +65,7 @@ const updateQuiz = async (req, res) => {
 const deleteQuiz = async (req, res) => {
     try {
         const quizId = req.params.id
-        console.log(quizId)
+        const userId = req.user.userId
 
         const findQuiz = await Quiz.findById(quizId);
         if (!findQuiz) {
@@ -72,6 +76,16 @@ const deleteQuiz = async (req, res) => {
         await Question.deleteMany({ _id: { $in: findQuiz.questions } });
 
         await Quiz.findByIdAndDelete(quizId);
+
+        // Remove the quiz from the user's own_quizzes array
+        const user = await User.findByIdAndUpdate(
+            userId,
+            { $pull: { own_quizzes: {quizId} } },
+            { new: true } // Return the updated document
+        );
+        if (!user) {
+            return res.status(StatusCodes.UNAUTHORIZED).json({ error: `User with id: ${userId} not found` });
+        }
 
         res.status(StatusCodes.OK).json({ message: "Quiz and associated questions deleted successfully" });
     } catch (err){
@@ -96,9 +110,21 @@ const getQuiz = async (req, res) => {
     }
 }
 
+const getAllQuiz = async (req, res) => {
+    try {
+        const quizzes = await Quiz.find().populate('questions'); // Populate questions if needed
+        res.status(StatusCodes.OK).json(quizzes);
+    } catch (err){
+        console.log(err.message);
+        res.status(400).send({error: err.message});
+    }
+}
+
+
 module.exports = {
     createQuiz,
     updateQuiz,
     deleteQuiz,
-    getQuiz
+    getQuiz,
+    getAllQuiz
 }

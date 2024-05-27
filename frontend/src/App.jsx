@@ -3,6 +3,8 @@ import LoginPage from "./pages/LoginPage.jsx";
 import QuizPage from "./pages/QuizPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
+import ProfilePage from "./pages/ProfilePage.jsx";
+import CreateQuizPage from "./pages/CreateQuizPage.jsx";
 
 const HomePoint = () => {
   const token = localStorage.getItem("token");
@@ -26,7 +28,15 @@ const router = createBrowserRouter([
   {
     path: '/quiz/:id',
     element: <QuizPage />,
-  }
+  },
+  {
+    path: '/quiz/edit',
+    element: <CreateQuizPage />,
+  },
+  {
+    path: '/profile',
+    element: <ProfilePage />,
+  },
 ])
 
 function App() {

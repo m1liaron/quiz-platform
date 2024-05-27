@@ -16,8 +16,6 @@ const LoginForm = () => {
     const dispatch = useDispatch();
     const {loading , error, user} = useSelector(selectUser);
 
-    const navigate = useNavigate();
-
     useEffect(() => {
         toast.error(error, {
             position: "top-center",
@@ -32,13 +30,14 @@ const LoginForm = () => {
         })
     }, [error]);
 
+    const navigation  = useNavigate();
     const onLogin = (values) => {
-            const userData = {
-                email: values.email,
-                password: values.password,
-            }
-            dispatch(login(userData));
-            navigate("/");
+        const userData = {
+            email: values.email,
+            password: values.password,
+        }
+        dispatch(login(userData));
+        navigation("/");
     }
 
     const initialValues = {

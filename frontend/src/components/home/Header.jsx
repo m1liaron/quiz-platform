@@ -1,5 +1,5 @@
-import React from 'react';
 import AuthButton from "./AuthButton.jsx";
+import {NavLink} from "react-router-dom";
 
 const Header = () => {
     const token = localStorage.getItem('token');
@@ -10,7 +10,9 @@ const Header = () => {
         }}>
             <h1 className='text-white'>Вікторини</h1>
             {token ? (
-                <h3>Вітаю</h3>
+                <NavLink to='profile'>
+                    <h3>Вітаю</h3>
+                </NavLink>
             ) : <AuthButton/>}
         </div>
     );

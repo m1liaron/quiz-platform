@@ -5,7 +5,7 @@ export const register = createAsyncThunk(
     'user/register', async (userData, thunkAPI) => {
         try {
             const response = await makeRequest("POST", '/auth/register', userData);
-            await localStorage.setItem("token", JSON.stringify(response.token)); // save token to localstorage
+            await localStorage.setItem("token", response.token); // save token to localstorage
             return response.user
         } catch (error){
             return thunkAPI.rejectWithValue(error.message); // Return error message
@@ -17,13 +17,25 @@ export const login = createAsyncThunk(
     'user/login', async (userData, thunkAPI) => {
         try{
             const response = await makeRequest("POST", '/auth/login', userData);
-            await localStorage.setItem("token", JSON.stringify(response.token)); // save token to localstorage
+            await localStorage.setItem("token", response.token); // save token to localstorage
             return response.user
         } catch (error){
             return thunkAPI.rejectWithValue(error.message); // Return error message
         }
     }
 )
+
+export const getUser = createAsyncThunk(
+    'user/get', async (thunkAPI) => {
+        try{
+            const response = await makeRequest("GET", '/user');
+            return response.user
+        } catch (error){
+            return thunkAPI.rejectWithValue(error.message); // Return error message
+        }
+    }
+)
+
 
 const initialState = {
     user:null,
@@ -60,6 +72,20 @@ const userSlice = createSlice({
                 state.error = null;
             })
             .addCase(login.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            // Get user
+            .addCase(getUser.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getUser.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user = action.payload;
+                state.error = null;
+            })
+            .addCase(getUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });

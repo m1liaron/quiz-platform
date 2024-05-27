@@ -13,11 +13,10 @@ export const makeRequest = async (method = "GET", url, data = {}, headers = []) 
             url: api.defaults.baseURL + url,
             data,
             headers: {
-                ...headers,
-                authorization: token // Add the Authorization header with the token
+                // ...headers,
+                authorization: `Bearer ${token}` // Add the Authorization header with the token
             }
         });
-        console.log(url)
         return response.data;
     } catch (error){
         throw error.response ? error.response.data : new Error('Network Error');

@@ -8,7 +8,7 @@ const getUserData = async (req, res) => {
         // Await the result of the Mongoose query
         const findUser = await User.findById(_id)
             .select('-password') // Exclude the password field
-            .populate('own_quizzes');
+            .populate('own_quizzes', 'name _id'); // Populate with name and _id fields
         if (!findUser) {
             return res.status(StatusCodes.NOT_FOUND).json({ error: 'User does not exist' });
         }
