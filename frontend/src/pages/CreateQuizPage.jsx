@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import {toast, ToastContainer} from "react-toastify";
 import {useDispatch, useSelector} from "react-redux";
 import {createQuiz, selectQuiz} from "../redux/quizSlice.js";
+import {useNavigate} from "react-router-dom";
 
 const CreateQuizPage = () => {
     const [title, setTitle] = useState('');
@@ -31,17 +32,6 @@ const CreateQuizPage = () => {
         setQuestions(newQuestions);
     };
 
-    const checkForDuplicates = () => {
-        const seen = new Set();
-        for (let i = 0; i < questions.length; i++) {
-            if(seen.has(questions[i].question)) {
-                return true;
-            }
-            seen.add(questions[i].question);
-        }
-        return false;
-    }
-
     useEffect(() => {
         toast.error(error, {
             position: "top-center",
@@ -57,6 +47,7 @@ const CreateQuizPage = () => {
     }, [error]);
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const onCreateQuiz = () => {
         const quizData = {
             title,
@@ -64,7 +55,8 @@ const CreateQuizPage = () => {
                 ...questions
             ]
         }
-        dispatch(createQuiz(quizData))
+        dispatch(createQuiz(quizData));
+        navigate('/')
     }
 
     return (

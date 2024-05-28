@@ -1,4 +1,4 @@
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {getQuiz, selectQuiz} from "../redux/quizSlice.js";
@@ -22,8 +22,9 @@ const QuizPage = () => {
     useEffect(() => {
         dispatch(getUser());
     }, []);
-    const isOwner = user._id === quizzes.createdBy;
+    const isOwner = user?._id === quizzes.createdBy;
 
+    const navigator = useNavigate();
     return (
         <div>
             {loading && <LoadingComponent/>}
@@ -39,7 +40,7 @@ const QuizPage = () => {
                                 <FaPen size={20} color="#000" style={{cursor: 'pointer'}} onClick={() => setEditMode(!isEditMode)}/>
                             )}
                         </div>
-                        <Button>Почати</Button>
+                        <Button onClick={() => navigator('learn')}>Почати</Button>
                     </div>
                     <div className='m-5'>
                         {quizzes.questions?.map((question) => (

@@ -28,7 +28,7 @@ export const deleteQuiz = createAsyncThunk(
     'quiz/delete', async (quizData, thunkAPI) => {
         try {
             const response = await makeRequest("DELETE",`/quiz/${quizData.id}`, quizData);
-            return response.data;
+            return response;
         } catch(error){
             return thunkAPI.rejectWithValue(error.message); // Return error message
         }
@@ -106,7 +106,7 @@ const quizSlice = createSlice({
             .addCase(deleteQuiz.fulfilled, (state, action) => {
                 state.loading = false;
                 // Remove the deleted quiz from state
-                state.quizzes = state.quizzes.filter(quiz => quiz._id !== action.payload.id);
+                state.quizzes = state.quizzes.filter(quiz => quiz._id !== action.payload._id);
             })
             .addCase(deleteQuiz.rejected, (state, action) => {
                 state.loading = false;

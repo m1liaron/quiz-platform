@@ -87,7 +87,7 @@ const deleteQuiz = async (req, res) => {
             return res.status(StatusCodes.UNAUTHORIZED).json({ message: `User with id: ${userId} not found` });
         }
 
-        res.status(StatusCodes.OK).json({ message: "Quiz and associated questions deleted successfully" });
+        res.status(StatusCodes.OK).json(findQuiz);
     } catch (err){
         console.log(err.message);
         res.status(400).send({message: err.message});

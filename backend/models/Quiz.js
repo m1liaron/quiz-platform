@@ -6,6 +6,10 @@ const QuizSchema = new mongoose.Schema({
         required: [true, 'Title is required'],
         unique: true
     },
+    image: {
+        type: String,
+        default: 'https://viralsolutions.net/wp-content/uploads/2019/06/shutterstock_749036344.jpg'
+    },
     questions: [
         {
             type: mongoose.Schema.Types.ObjectId,

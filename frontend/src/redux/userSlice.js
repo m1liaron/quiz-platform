@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {makeRequest} from "../utils/api.js";
+import {deleteQuiz} from "./quizSlice.js";
 
 export const register = createAsyncThunk(
     'user/register', async (userData, thunkAPI) => {
@@ -34,6 +35,17 @@ export const getUser = createAsyncThunk(
     }
 )
 
+export const updateUser = createAsyncThunk(
+    'user/update', async (data, thunkAPI) => {
+        try{
+            console.log(data)
+            const response = await makeRequest("PUT", '/user', data);
+            return response.user
+        } catch (error){
+            return thunkAPI.rejectWithValue(error.message); // Return error message
+        }
+    }
+)
 
 const initialState = {
     user:null,
@@ -86,7 +98,15 @@ const userSlice = createSlice({
             .addCase(getUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
-            });
+            })
+            // delete quiz from own_quizzes
+            .addCase(deleteQuiz.fulfilled, (state, action) => {
+                if (state.user) {
+                    state.user.own_quizzes = state.user.own_quizzes.filter(
+                        quiz => quiz.quizId !== action.meta.arg.id
+                    );
+                }
+            })
     }
 })
 

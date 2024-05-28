@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {getUser, selectUser} from "../redux/userSlice.js";
 import {AiOutlineLoading} from "react-icons/ai";
@@ -20,7 +20,7 @@ const ProfilePage = () => {
     }
 
     return (
-        <div>
+        <div className='p-5'>
             <BackArrow/>
             {loading && (
                 <AiOutlineLoading color='#000' size={40} />
@@ -28,15 +28,21 @@ const ProfilePage = () => {
             {user && (
                 <div>
                     <h1>{user.name}</h1>
-                    <h2>Ваші вікторини</h2>
-                    {user.own_quizzes.map(quiz => (
-                        <div key={quiz._id} className="d-flex align-items-center gap-2">
-                            <NavLink to={`/quiz/${quiz.quizId}`}>
-                                <li>{quiz.title}</li>
-                            </NavLink>
-                            <FaTrash size={20} color="#000" onClick={() => onDeleteQuiz(quiz.quizId)} style={{cursor:'pointer'}}/>
-                        </div>
-                    ))}
+                    <h2>Ваші вікторини:</h2>
+                    <div className='d-flex justify-content-center gap-5'>
+                        {user.own_quizzes.map(quiz => (
+                            <div
+                                key={quiz._id}
+                                style={{borderRadius: 4}}
+                                className="d-flex justify-content-between align-items-center gap-2 bg-dark text-white p-3 w-25 flex-wrap "
+                            >
+                                <NavLink to={`/quiz/${quiz.quizId}`}>
+                                    <h3 className='text-white'>{quiz.title}</h3>
+                                </NavLink>
+                                <FaTrash size={20} color="#fff" onClick={() => onDeleteQuiz(quiz.quizId)} style={{cursor:'pointer'}}/>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             )}
         </div>
