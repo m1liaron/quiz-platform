@@ -10,13 +10,13 @@ const getUserData = async (req, res) => {
             .select('-password') // Exclude the password field
             .populate('own_quizzes', 'name _id'); // Populate with name and _id fields
         if (!findUser) {
-            return res.status(StatusCodes.NOT_FOUND).json({ error: 'User does not exist' });
+            return res.status(StatusCodes.NOT_FOUND).json({ message: 'User does not exist' });
         }
 
         res.status(StatusCodes.OK).json({ user: findUser });
     } catch (err) {
         console.log(err);
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err.message });
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: err.message });
     }
 }
 

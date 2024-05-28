@@ -5,7 +5,7 @@ import {makeRequest} from "../utils/api.js";
 export const createQuiz = createAsyncThunk(
     'quiz/create', async (quizData, thunkAPI) => {
         try {
-            const response = await makeRequest("POST", `/quiz/${quizData.id}`, quizData);
+            const response = await makeRequest("POST", '/quiz', quizData);
             return response.data;
         } catch(error){
             return thunkAPI.rejectWithValue(error.message); // Return error message

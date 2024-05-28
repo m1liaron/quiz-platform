@@ -5,7 +5,6 @@ export const register = createAsyncThunk(
     'user/register', async (userData, thunkAPI) => {
         try {
             const response = await makeRequest("POST", '/auth/register', userData);
-            await localStorage.setItem("token", response.token); // save token to localstorage
             return response.user
         } catch (error){
             return thunkAPI.rejectWithValue(error.message); // Return error message
@@ -17,7 +16,6 @@ export const login = createAsyncThunk(
     'user/login', async (userData, thunkAPI) => {
         try{
             const response = await makeRequest("POST", '/auth/login', userData);
-            await localStorage.setItem("token", response.token); // save token to localstorage
             return response.user
         } catch (error){
             return thunkAPI.rejectWithValue(error.message); // Return error message
