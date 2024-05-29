@@ -37,7 +37,7 @@ const createQuiz = async (req, res) => {
         res.status(StatusCodes.CREATED).json({ quiz: newQuiz });
     } catch (err){
         console.log(err.message);
-        res.status(400).send({error: err.message});
+        res.status(400).send({message: err.message});
     }
 }
 
@@ -52,13 +52,13 @@ const updateQuiz = async (req, res) => {
         );
 
         if (!updatedQuiz) {
-            return res.status(StatusCodes.NOT_FOUND).json({ error: 'Quiz not found' });
+            return res.status(StatusCodes.NOT_FOUND).json({ message: 'Quiz not found' });
         }
 
         res.status(StatusCodes.OK).json(updatedQuiz);
     } catch (err){
         console.log(err.message);
-        res.status(400).send({error: err.message});
+        res.status(400).send({message: err.message});
     }
 }
 
@@ -69,7 +69,7 @@ const deleteQuiz = async (req, res) => {
 
         const findQuiz = await Quiz.findById(quizId);
         if (!findQuiz) {
-            return res.status(404).json({ error: `Quiz with id: ${quizId} not found` });
+            return res.status(404).json({ message: `Quiz with id: ${quizId} not found` });
         }
 
         // Delete all questions associated with this quiz
@@ -84,29 +84,28 @@ const deleteQuiz = async (req, res) => {
             { new: true } // Return the updated document
         );
         if (!user) {
-            return res.status(StatusCodes.UNAUTHORIZED).json({ error: `User with id: ${userId} not found` });
+            return res.status(StatusCodes.UNAUTHORIZED).json({ message: `User with id: ${userId} not found` });
         }
 
-        res.status(StatusCodes.OK).json({ message: "Quiz and associated questions deleted successfully" });
+        res.status(StatusCodes.OK).json(findQuiz);
     } catch (err){
         console.log(err.message);
-        res.status(400).send({error: err.message});
+        res.status(400).send({message: err.message});
     }
 }
 
 const getQuiz = async (req, res) => {
     try {
         const { id } = req.params;
-        console.log(id)
         const quiz = await Quiz.findById(id).populate('questions');
         if (!quiz) {
-            return res.status(StatusCodes.NOT_FOUND).json({ error: `Quiz with id = ${id} not found` });
+            return res.status(StatusCodes.NOT_FOUND).json({ message: `Quiz with id = ${id} not found` });
         }
 
         res.status(200).json(quiz);
     } catch (err){
         console.log(err.message);
-        res.status(400).send({error: err.message});
+        res.status(400).send({message: err.message});
     }
 }
 

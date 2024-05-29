@@ -9,13 +9,13 @@ const updateQuestion = async (req, res) => {
             _id: id,
         }, req.body)
         if(!updatedQuestion){
-            return res.status(400).json({error: `Question with id: ${id},  not found`});
+            return res.status(400).json({message: `Question with id: ${id},  not found`});
         }
 
         res.status(StatusCodes.OK).json(updatedQuestion);
     } catch(err){
         console.log(err);
-        res.status(400).json({error: err.message})
+        res.status(400).json({message: err.message})
     }
 }
 
@@ -25,14 +25,14 @@ const deleteQuestion = async (req, res) => {
 
         const findQuestion = Question.findOne({id});
         if(!findQuestion){
-            return res.status(400).json({error: `Question with id: ${id}, not found`});
+            return res.status(400).json({message: `Question with id: ${id}, not found`});
         }
         await Question.findByIdAndDelete(id)
 
         res.status(StatusCodes.OK).json({message: `Question with id: ${id}, successfully deleted`});
     } catch(err){
         console.log(err);
-        res.status(400).json({error: err.message})
+        res.status(400).json({message: err.message})
     }
 }
 

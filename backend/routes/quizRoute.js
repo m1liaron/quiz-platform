@@ -10,12 +10,14 @@ const { createQuiz, updateQuiz, deleteQuiz, getQuiz, getAllQuiz} = require('../c
 
 // Apply authorization middleware to all routes with /:id
 router.use('/:id', authorization);
+router.use('/', authorization);
 
-router.get('/', authorization, getAllQuiz)
+router.route('/')
+    .get(getAllQuiz)
+    .post(createQuiz)
 
 router.route('/:id')
     .get(getQuiz)
-    .post(createQuiz)
     .put(updateQuiz)
     .delete(deleteQuiz);
 

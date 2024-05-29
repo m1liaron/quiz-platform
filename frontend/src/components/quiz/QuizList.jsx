@@ -1,10 +1,23 @@
-import noQuizImage from "../../assets/images/quiz-template.jpg";
 import {useNavigate} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {getUser, selectUser} from "../../redux/userSlice.js";
+import {useEffect} from "react";
 
 const QuizList = ({quizzes}) => {
+    const {user} = useSelector(selectUser);
+
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getUser());
+    }, []);
+
+    const isOwner = (quizOwnerId) => {
+        return user._id === quizOwnerId ? "Own" : ""
+    }
+
     const navigator = useNavigate();
     return (
-        <>
+        <div className='d-flex gap-5 flex-wrap'>
             {quizzes.map(quiz => (
                 <div
                     key={quiz._id}
@@ -12,14 +25,15 @@ const QuizList = ({quizzes}) => {
                     onClick={() => navigator(`/quiz/${quiz._id}`)}
                 >
                     <img
-                        src={noQuizImage}
+                        src={quiz.image}
                         alt='quiz image'
                         className="w-100"
                     />
                     <h1 className='text-center'>{quiz.title}</h1>
+                    <h1 className='text-end'>{isOwner(quiz.createdBy)}</h1>
                 </div>
             ))}
-        </>
+        </div>
     );
 };
 

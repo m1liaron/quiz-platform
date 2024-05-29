@@ -2,15 +2,21 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const connectDB = require('./db/connect');
+// routes import
 const authRouter = require('./routes/authRoute');
 const quizRouter = require('./routes/quizRoute');
 const questionRouter = require('./routes/questionRoute');
 const userRouter = require('./routes/userRoute');
 
 // uses
+app.use(cors({
+    origin: 'http://localhost:5173', // Update with your frontend origin
+    credentials: true // Allow credentials (cookies)
+}));
+app.use(cookieParser());
 app.use(express.json());
-app.use(cors());
 
 // routes
 app.use('/api/auth', authRouter);

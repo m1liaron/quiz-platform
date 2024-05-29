@@ -13,9 +13,14 @@ const register = async (req, res) => {
         const user = await User.create(req.body);
         const token = user.createJWT();
 
+        res.cookie('jwt', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+            sameSite: 'None', // Adjust as needed
+            maxAge: 36000000 // 1 hour
+        });
         res.status(StatusCodes.CREATED).json({
-            user: { name: user.name, email: user.email },
-            token
+            user: { name: user.name, email: user.email }
         });
     } catch (err){
         console.log(err);
@@ -41,10 +46,14 @@ const login = async (req, res) => {
         }
         const token = user.createJWT();
 
+        res.cookie('jwt', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+            sameSite: 'Strict', // Adjust as needed
+            maxAge: 36000000 // 1 hour
+        });
         res.status(StatusCodes.CREATED).json({
-            user: {name: user.name, email: user.email},
-            token
-        })
+            user: {name: user.name, email: user.email}})
     } catch (err){
         console.log(err);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: err.message})
