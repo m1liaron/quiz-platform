@@ -5,9 +5,12 @@ import {toast, ToastContainer} from "react-toastify";
 import {useDispatch, useSelector} from "react-redux";
 import {createQuiz, selectQuiz} from "../redux/quizSlice.js";
 import {useNavigate} from "react-router-dom";
+import {Image} from "react-bootstrap";
 
 const CreateQuizPage = () => {
     const [title, setTitle] = useState('');
+    const [image, setImage] = useState(null);
+    const [imagePreview, setImagePreview] = useState('');
     const [questions, setQuestions] = useState([{
         question: 'What ... you done?',
         answer: 'have'
@@ -48,6 +51,7 @@ const CreateQuizPage = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
     const onCreateQuiz = () => {
         const quizData = {
             title,
@@ -63,7 +67,6 @@ const CreateQuizPage = () => {
         <>
             <ToastContainer />
             <BackArrow/>
-            <h1>Create quiz page</h1>
             <div>
                 <div className="input-group mb-3 p-5">
                     <input
@@ -73,6 +76,15 @@ const CreateQuizPage = () => {
                         onChange={(e) => setTitle(e.target.value)}
                         placeholder="Назва вікторини..."
                     />
+                </div>
+                <div className="input-group mb-3 p-5">
+                    <input
+                        type='file'
+                        value={image}
+                        onChange={(e) => setImage(e.target.value)}
+                    />
+                    <img src={image}/>
+                    <p>{image}</p>
                 </div>
                 <div className='p-5 mb-3'>
                     {questions?.map((question, index) => (

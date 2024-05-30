@@ -9,6 +9,7 @@ const authRouter = require('./routes/authRoute');
 const quizRouter = require('./routes/quizRoute');
 const questionRouter = require('./routes/questionRoute');
 const userRouter = require('./routes/userRoute');
+const resultRouter = require('./routes/resultRoute');
 
 // uses
 app.use(cors({
@@ -23,6 +24,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/quiz', quizRouter);
 app.use('/api/question', questionRouter);
 app.use('/api/user', userRouter);
+app.use('/api/result', resultRouter);
 
 const port = process.env.PORT || 4000;
 

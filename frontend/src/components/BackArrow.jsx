@@ -5,7 +5,7 @@ const BackArrow = () => {
 
     const navigate = useNavigate();
     return (
-        <FaArrowLeft style={{cursor:'pointer'}} size={20} color="#000" onClick={() => navigate(-1)}/>
+        <FaArrowLeft style={{cursor:'pointer'}} size={30} color="#000" onClick={() => navigate(-1)}/>
     );
 };
 

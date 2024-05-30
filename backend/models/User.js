@@ -36,9 +36,14 @@ const UserSchema = new mongoose.Schema({
   ],
   completed_quizzes: [
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Quiz',
-            default:[]
+           title: {
+               type: String,
+               required: true,
+           },
+            resultId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Result',
+            }
         }
     ]
 }, { timestamps: true })
