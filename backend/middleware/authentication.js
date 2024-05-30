@@ -13,7 +13,7 @@ const auth = async (req, res, next) => {
 
         const user = User.findById(payload.userId).select('-password');
         if (!user) {
-            return res.status(401).json({ message: 'Authentication invalid' });
+            return res.status(401).json({ message: 'Authentication invalid, please login' });
         }
         req.user = user;
         req.user = { userId: payload.userId, name: payload.name };

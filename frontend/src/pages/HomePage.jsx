@@ -6,6 +6,7 @@ import LoadingComponent from "../components/LoadingComponent.jsx";
 import QuizList from "../components/quiz/QuizList.jsx";
 import Button from "react-bootstrap/Button";
 import {useNavigate} from "react-router-dom";
+import {toast, ToastContainer} from "react-toastify";
 
 const HomePage = () => {
     const {quizzes, error, loading} = useSelector(selectQuiz);
@@ -14,6 +15,20 @@ const HomePage = () => {
     useEffect(() => {
         dispatch(getAllQuiz())
     }, []);
+
+    useEffect(() => {
+        toast.error(error, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            // transition: Bounce,
+        })
+    }, [error]);
 
     const navigate = useNavigate();
     return (
@@ -25,7 +40,8 @@ const HomePage = () => {
             </div>
 
             {loading && <LoadingComponent/>}
-            {error && <p>Error: {error}</p>}
+            {/*{error && <p>Error: {error}</p>}*/}
+            <ToastContainer/>
             {quizzes.length && (
                 <div className='p-5 flex-wrap'>
                     <QuizList quizzes={quizzes} />

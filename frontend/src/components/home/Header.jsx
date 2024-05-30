@@ -20,8 +20,12 @@ const Header = () => {
         >
             <h1 className='text-white'>Вікторини</h1>
             {user ? (
-                <NavLink to='/profile'>
-                    <h3>Мій профіль</h3>
+                <NavLink to='/profile' className='bg-white p-2' style={{borderRadius:100}}>
+                    <img
+                        style={{width:50}}
+                        src="https://www.pngall.com/wp-content/uploads/12/Avatar-PNG-Image.png"
+                        alt="Профіль"
+                    />
                 </NavLink>
             ) : (
                 <NavLink to='/login'>

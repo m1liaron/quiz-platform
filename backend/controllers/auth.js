@@ -16,7 +16,7 @@ const register = async (req, res) => {
         res.cookie('jwt', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-            sameSite: 'None', // Adjust as needed
+            sameSite: 'Strict', // Adjust as needed
             maxAge: 36000000 // 1 hour
         });
         res.status(StatusCodes.CREATED).json({

@@ -6,6 +6,7 @@ import RegisterPage from "./pages/RegisterPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import CreateQuizPage from "./pages/CreateQuizPage.jsx";
 import QuizLearnPage from "./pages/QuizLearnPage.jsx";
+import ResultPage from "./pages/ResultPage.jsx";
 
 const getCookie = (name) => {
   const value = `; ${document.cookie}`;
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
   {
     path: '/quiz/edit',
     element: <CreateQuizPage />,
+  },
+  {
+    path: '/result/:id',
+    element: <ResultPage />,
   },
   {
     path: '/profile',

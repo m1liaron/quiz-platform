@@ -1,15 +1,17 @@
 import { Card, Container, Row, Col } from 'react-bootstrap';
 import { useState} from 'react';
 import Button from "react-bootstrap/Button";
-import {useDispatch} from "react-redux";
-import {updateUser} from "../../redux/userSlice.js";
+import {useDispatch, useSelector} from "react-redux";
+import {createResult, selectResults} from "../../redux/resultSlice.js";
+import {useNavigate} from "react-router-dom";
 
 const QuizComponent = ({ quizzes }) => {
+    const {results} = useSelector(selectResults);
     const [selectedQuizIndex, setSelectedQuizIndex] = useState(0);
     const [completedQuestions, setCompletedQuestions] = useState([]);
     const [answer, setAnswer] = useState('');
-    const [showResults, setShowResults] = useState(false);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     if (!quizzes || !quizzes.questions) {
         return <p>No quizzes available.</p>;
@@ -57,7 +59,7 @@ const QuizComponent = ({ quizzes }) => {
         setAnswer('');
     };
 
-    const finishQuiz = () => {
+    const finishQuiz = async () => {
         const resultedQuestions = completedQuestions?.map(question => {
             return {
                 correct: question.userAnswer.toLowerCase() === question.answer.toLowerCase(),
@@ -66,10 +68,14 @@ const QuizComponent = ({ quizzes }) => {
         })
 
         const data = {
-            completed_quizzes: resultedQuestions
+            title: quizzes.title,
+            quizId: quizzes._id,
+            image: quizzes.image,
+            questions: resultedQuestions
         }
-        setShowResults(true);
-        dispatch(updateUser({data}))
+
+        await dispatch(createResult(data))
+        navigate(`/result/${results._id}`)
     }
 
     return (
@@ -122,38 +128,12 @@ const QuizComponent = ({ quizzes }) => {
                 )}
                 <Button
                     onClick={!haveMoreQuestions ? finishQuiz : saveAnswer}
+                    disabled={!answer && haveMoreQuestions}
                 >
                     {!haveMoreQuestions ? "Закінчити проходження" : "Зберегти відповідь"}
                 </Button>
             </Row>
-            {showResults && (
-                <Results quizzes={completedQuestions}/>
-            )}
         </Container>
-    );
-};
-
-const Results = ({quizzes}) => {
-    const resultedQuestions = quizzes.map(question => {
-        return {
-            correct: question.userAnswer.toLowerCase() === question.answer.toLowerCase(),
-            ...question
-        }
-    })
-
-    return (
-        <div>
-            {quizzes && (
-                <>
-                    {resultedQuestions && resultedQuestions.map((question) => (
-                        <div style={{ backgroundColor: question.correct ? "green" : "red" }} key={question._id}>
-                            <h2>{question.question}</h2>
-                            <h3>{question.userAnswer}</h3>
-                        </div>
-                    ))}
-                </>
-            )}
-        </div>
     );
 };
 

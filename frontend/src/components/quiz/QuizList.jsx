@@ -2,6 +2,7 @@ import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {getUser, selectUser} from "../../redux/userSlice.js";
 import {useEffect} from "react";
+import {RxAvatar} from "react-icons/rx";
 
 const QuizList = ({quizzes}) => {
     const {user} = useSelector(selectUser);
@@ -30,7 +31,10 @@ const QuizList = ({quizzes}) => {
                         className="w-100"
                     />
                     <h1 className='text-center'>{quiz.title}</h1>
-                    <h1 className='text-end'>{isOwner(quiz.createdBy)}</h1>
+                    {/*<h1 className='text-end'>{isOwner(quiz.createdBy)}</h1>*/}
+                    {isOwner && (
+                        <RxAvatar size={30} color="#000" />
+                    )}
                 </div>
             ))}
         </div>

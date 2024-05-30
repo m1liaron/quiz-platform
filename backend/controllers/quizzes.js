@@ -115,7 +115,7 @@ const getAllQuiz = async (req, res) => {
         res.status(StatusCodes.OK).json(quizzes);
     } catch (err){
         console.log(err.message);
-        res.status(400).send({error: err.message});
+        res.status(400).send({message: err.message});
     }
 }
 
